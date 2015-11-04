@@ -119,7 +119,7 @@ setupMiddleware = function setupMiddleware(blogApp, adminApp) {
             'Cache-Control': 'public, max-age=' + utils.ONE_YEAR_S
         }
     }));
-    blogApp.use(uncapitalise);
+    //blogApp.use(uncapitalise);
 
     // Body parsing
     blogApp.use(bodyParser.json());

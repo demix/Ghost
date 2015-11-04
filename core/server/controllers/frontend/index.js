@@ -26,6 +26,8 @@ var _           = require('lodash'),
     frontendControllers,
     staticPostPermalink = routeMatch('/:slug/:edit?');
 
+var idProcessor = require('../../utils/id-processor');
+
 /*
 * Sets the response context around a post and renders it
 * with the current theme's post view. Used by post preview
@@ -194,6 +196,8 @@ frontendControllers = {
 
             params = match;
 
+            params.id && (params.id = idProcessor.decode(params.id));
+          
             // Sanitize params we're going to use to lookup the post.
             postLookup = _.pick(params, 'slug', 'id');
             // Add author, tag and fields
@@ -211,6 +215,7 @@ frontendControllers = {
 
             function render() {
                 // If we're ready to render the page but the last param is 'edit' then we'll send you to the edit page.
+
                 if (params.edit) {
                     params.edit = params.edit.toLowerCase();
                 }
@@ -220,7 +225,6 @@ frontendControllers = {
                     // reject with type: 'NotFound'
                     return Promise.reject(new errors.NotFoundError());
                 }
-
                 setRequestIsSecure(req, post);
 
                 filters.doFilter('prePostsRender', post, res.locals)

@@ -3,6 +3,7 @@
 
 var moment            = require('moment'),
     _                 = require('lodash'),
+    idProcessor       = require('../utils/id-processor'),
     ghostConfig = '';
 
 // ## setConfig
@@ -111,7 +112,12 @@ function urlPathForPost(post, permalinks) {
     // replace tags like :slug or :year with actual values
     output = output.replace(/(:[a-z]+)/g, function (match) {
         if (_.has(tags, match.substr(1))) {
-            return tags[match.substr(1)]();
+          var type = match.substr(1);
+          if(type == 'id') {
+              return idProcessor.encode(tags[type]());
+          } else {
+              return tags[type]();
+          }
         }
     });
 
